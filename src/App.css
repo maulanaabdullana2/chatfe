@@ -1,42 +1,79 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* App.css */
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.App-header {
+  flex: 1;
+  width: 100vw; /* Menjadikan lebar penuh sesuai viewport */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  overflow-y: auto;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.App-logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.App-messages {
+  width: 80%;
+}
+
+.App-message {
+  background-color: #d3d3d3;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.App-control {
+  padding: 10px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column; /* Tampilkan input dan tombol secara vertikal */
+  max-width: 400px; /* Maksimum lebar kontrol */
+  margin: 0 auto; /* Pusatkan kontrol di tengah */
+  width: 70%;
+}
+
+.App-control input[type="text"],
+.App-control textarea {
+  padding: 10px;
+  margin-bottom: 10px; /* Tambahkan jarak antara input dan tombol */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 5px auto;
+  width:80%; /* Lebar input dan textarea mengisi lebar kontrol */
+}
+
+.App-control .App-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  margin: 5px auto;
+  cursor: pointer;
+  width: 70%; /* Tombol mengisi lebar kontrol */
+}
+
+/* Responsif */
+@media (max-width: 600px) {
+  .App-header {
+    padding: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .App-logo {
+    width: 60px;
+    margin-bottom: 10px;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

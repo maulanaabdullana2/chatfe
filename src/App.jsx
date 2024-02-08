@@ -1,3 +1,4 @@
+// App.js
 import { useEffect, useState } from "react";
 import logo from "./assets/react.svg";
 import "./App.css";
@@ -11,47 +12,38 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-
-    getmessgae()
-
     initSocket();
+    getMessages();
+  }, [message]);
 
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, []);
+  const initSocket = async () => {
+    const socket = io.connect(import.meta.env.VITE_SOCKET_URL);
 
-   const initSocket = async () => {
-     const socket = io.connect(import.meta.env.VITE_SOCKET_URL);
+    socket.on("connect", () => {
+      console.log("Connected to socket");
+    });
 
-     socket.on("connect", () => {
-       console.log("Connected to socket");
-     });
+    socket.on("disconnect", () => {
+      console.log("Disconnected from socket");
+    });
 
-     socket.on("disconnect", () => {
-       console.log("Disconnected from socket");
-     });
+    socket.on("incoming message", (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
 
-     socket.on("incoming message", (msg) => {
-       setMessages((prevMessages) => [...prevMessages, msg]);
-     });
+    setSocket(socket);
+  };
 
-     setSocket(socket);
-   };
-
-  const getmessgae = async () =>{
-     try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_SOCKET_URL}/messages`,
-        );
-        const responseData = response.data;
-        setMessages(responseData.data.message);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-  }
+  const getMessages = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SOCKET_URL}/messages`,
+      );
+      setMessages(response.data.data.message);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
 
   const handleTextChange = (e) => {
     setMessage(e.target.value);
@@ -71,7 +63,9 @@ function App() {
         <div className="App-messages">
           {messages.map((msg, index) => (
             <div className="App-message" key={index}>
-              <strong>{msg.username}:</strong> {msg.message}
+              <strong>
+                {msg.username}: {msg.message}
+              </strong>
             </div>
           ))}
         </div>
