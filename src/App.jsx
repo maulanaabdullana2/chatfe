@@ -5,39 +5,26 @@ import "./App.css";
 import axios from "axios";
 import io from "socket.io-client";
 
+const socket = io.connect("http://localhost:8000/");
+
+
 function App() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState("");
-  const [socket, setSocket] = useState(null);
 
+  
   useEffect(() => {
-    initSocket();
-    getMessages();
-  }, [message]);
-
-  const initSocket = async () => {
-    const socket = io.connect(import.meta.env.VITE_SOCKET_URL);
-
-    socket.on("connect", () => {
-      console.log("Connected to socket");
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected from socket");
-    });
-
     socket.on("incoming message", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
-
-    setSocket(socket);
-  };
+    getMessages();
+  }, [messages,socket]);
 
   const getMessages = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SOCKET_URL}/messages`,
+        `http://localhost:8000/messages`,
       );
       setMessages(response.data.data.message);
     } catch (error) {
