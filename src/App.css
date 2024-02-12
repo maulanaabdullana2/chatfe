@@ -1,79 +1,60 @@
-/* App.css */
+/* ChatApp.css */
 
-.App {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+.chat-container {
+  max-width: 80%; /* Sesuaikan dengan preferensi Anda */
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
-.App-header {
-  flex: 1;
-  width: 100vw; /* Menjadikan lebar penuh sesuai viewport */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: #f0f0f0;
+.messages-container {
+  max-height: 300px; /* Sesuaikan dengan kebutuhan */
   overflow-y: auto;
 }
 
-.App-logo {
-  width: 80px;
-  height: auto;
-  margin-bottom: 20px;
-}
-
-.App-messages {
-  width: 80%;
-}
-
-.App-message {
-  background-color: #d3d3d3;
-  padding: 10px;
+.message {
   margin-bottom: 10px;
-  border-radius: 8px;
 }
 
-.App-control {
-  padding: 10px;
-  background-color: #ffffff;
+.chat-image {
+  max-width: 100px; /* Sesuaikan dengan kebutuhan */
+  max-height: 100px; /* Sesuaikan dengan kebutuhan */
+}
+
+.image-upload-container {
+  margin-top: 10px;
+}
+
+/* Untuk membuat form dan input responsif */
+form {
   display: flex;
-  flex-direction: column; /* Tampilkan input dan tombol secara vertikal */
-  max-width: 400px; /* Maksimum lebar kontrol */
-  margin: 0 auto; /* Pusatkan kontrol di tengah */
-  width: 70%;
+  flex-wrap: wrap;
 }
 
-.App-control input[type="text"],
-.App-control textarea {
-  padding: 10px;
-  margin-bottom: 10px; /* Tambahkan jarak antara input dan tombol */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin: 5px auto;
-  width:80%; /* Lebar input dan textarea mengisi lebar kontrol */
+/* ChatApp.css */
+
+/* Atur lebar input agar lebih besar */
+input[type="text"] {
+  width: calc(100% - 120px); /* Lebar total dikurangi dengan lebar tombol */
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 20px;;
 }
 
-.App-control .App-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  margin: 5px auto;
-  cursor: pointer;
-  width: 70%; /* Tombol mengisi lebar kontrol */
+button {
+  margin-bottom: 10px;
 }
 
-/* Responsif */
-@media (max-width: 600px) {
-  .App-header {
-    padding: 10px;
+@media (max-width: 768px) {
+  .chat-container {
+    max-width: 90%; /* Sesuaikan dengan preferensi Anda */
   }
-
-  .App-logo {
-    width: 60px;
-    margin-bottom: 10px;
+  input[type="text"],
+  button {
+    width: 100%;
+    margin-right: 0;
   }
 }
+
