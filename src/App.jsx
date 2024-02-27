@@ -56,6 +56,7 @@ function ChatApp() {
       };
       reader.readAsDataURL(selectedImage);
     }
+    selectedImage("")
   };
 
   return (
