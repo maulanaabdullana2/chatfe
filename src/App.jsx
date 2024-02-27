@@ -54,7 +54,7 @@ function ChatApp() {
   };
 
   const handleImageChange = (event) => {
-    setSelectedImage(event.dataTransfer.files[0][0]);
+    setSelectedImage(event.dataTransfer.files[0]);
   };
 
   return (
