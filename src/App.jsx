@@ -45,7 +45,14 @@ function ChatApp() {
   };
 
   const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -77,7 +84,12 @@ function ChatApp() {
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
         />
-        <input type="file" onChange={handleImageChange} />
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleImageChange}
+        />
         <button type="submit">Send</button>
       </form>
     </div>
