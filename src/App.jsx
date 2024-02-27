@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
 import "./App.css";
@@ -54,18 +54,7 @@ function ChatApp() {
   };
 
   const handleImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      // Jika pengguna memilih gambar dari sistem file
-      setSelectedImage(event.target.files[0]);
-    } else if (event.dataTransfer && event.dataTransfer.files[0]) {
-      // Jika pengguna memilih gambar dari drag and drop atau dari kamera
-      const file = event.dataTransfer.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    setSelectedImage(event.target.files[0]);
   };
 
   return (
@@ -98,24 +87,9 @@ function ChatApp() {
           onChange={(e) => setMessageText(e.target.value)}
           required
         />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          capture="camera"
-        />
+        <input type="file" onChange={handleImageChange} />
         <button type="submit">Send</button>
       </form>
-      {selectedImage && (
-        <img
-          src={
-            typeof selectedImage === "string"
-              ? selectedImage
-              : URL.createObjectURL(selectedImage)
-          }
-          alt="Selected"
-        />
-      )}
     </div>
   );
 }
