@@ -30,6 +30,31 @@ function ChatApp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    socket.emit("chat message", {
+      username: username,
+      message: messageText,
+      image: null,
+    });
+
+    setMessageText("");
+  };
+
+  const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      // Jika pengguna memilih gambar dari file
+      setSelectedImage(event.target.files[0]);
+    } else {
+      // Jika pengguna memilih gambar dari kamera
+      const captureImage = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImage(e.target.result);
+      };
+      reader.readAsDataURL(captureImage);
+    }
+  };
+
+  const handleImageUpload = () => {
     if (selectedImage) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -41,20 +66,7 @@ function ChatApp() {
         });
       };
       reader.readAsDataURL(selectedImage);
-      setSelectedImage(null);
-    } else {
-      socket.emit("chat message", {
-        username: username,
-        message: messageText,
-        image: null,
-      });
     }
-
-    setMessageText("");
-  };
-
-  const handleImageChange = (event) => {
-    setSelectedImage(event.dataTransfer.files[0]);
   };
 
   return (
@@ -87,9 +99,18 @@ function ChatApp() {
           onChange={(e) => setMessageText(e.target.value)}
           required
         />
-        <input type="file" onChange={handleImageChange} />
         <button type="submit">Send</button>
       </form>
+      <div className="image-upload-container">
+        {/* Tambahkan opsi capture untuk mengambil gambar dari kamera */}
+        <input
+          type="file"
+          onChange={handleImageChange}
+          accept="image/*"
+          capture="environment"
+        />
+        <button onClick={handleImageUpload}>Upload Image</button>
+      </div>
     </div>
   );
 }
