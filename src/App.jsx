@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
-import "./App.css";
+import "./App.css"; 
 const socket = io("https://chatrealtimes-92a9bf807df6.herokuapp.com/");
 
 function ChatApp() {
@@ -58,31 +58,6 @@ function ChatApp() {
     }
   };
 
-  const handleCameraCapture = () => {
-    const constraints = {
-      video: true,
-    };
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((mediaStream) => {
-        const mediaStreamTrack = mediaStream.getVideoTracks()[0];
-        const imageCapture = new ImageCapture(mediaStreamTrack);
-
-        imageCapture
-          .takePhoto()
-          .then((blob) => {
-            setSelectedImage(blob);
-          })
-          .catch((error) => {
-            console.error("takePhoto() error:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("getUserMedia() error:", error);
-      });
-  };
-
   return (
     <div className="chat-container">
       <h1>Chat App</h1>
@@ -118,7 +93,6 @@ function ChatApp() {
       <div className="image-upload-container">
         <input type="file" onChange={handleImageChange} />
         <button onClick={handleImageUpload}>Upload Image</button>
-        <button onClick={handleCameraCapture}>Capture from Camera</button>
       </div>
     </div>
   );
