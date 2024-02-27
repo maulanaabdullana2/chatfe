@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
 import "./App.css"; 
-const socket = io("https://chatrealtimes-92a9bf807df6.herokuapp.com/");
+const socket = io("https://chatrealtimes-f870c324e3ac.herokuapp.com/");
 
 function ChatApp() {
   const [messages, setMessages] = useState([]);
