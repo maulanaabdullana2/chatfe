@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
-import "./App.css"; 
+import "./App.css";
 const socket = io("https://chatrealtimes-f870c324e3ac.herokuapp.com/");
 
 function ChatApp() {
@@ -11,6 +11,7 @@ function ChatApp() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
+
     socket.emit("get messages");
 
     socket.on("messages", (messages) => {
@@ -25,7 +26,7 @@ function ChatApp() {
       socket.off("messages");
       socket.off("incoming message");
     };
-  }, []);
+  }, [socket]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,18 +44,29 @@ function ChatApp() {
     setSelectedImage(event.target.files[0]);
   };
 
-  const handleImageUpload = () => {
+  const handleImageUpload = async () => {
     if (selectedImage) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const imageBase64 = reader.result;
+      const formData = new FormData();
+      formData.append("image", selectedImage);
+
+      try {
+        const response = await fetch(
+          "https://chatrealtimes-f870c324e3ac.herokuapp.com/upload",
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+        const data = await response.json();
+
         socket.emit("chat message", {
           username: username,
           message: "",
-          image: imageBase64,
+          image: data.image,
         });
-      };
-      reader.readAsDataURL(selectedImage);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
