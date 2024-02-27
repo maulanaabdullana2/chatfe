@@ -54,7 +54,11 @@ function ChatApp() {
   };
 
   const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(event.target.files[0]);
+    } else if (event.dataTransfer && event.dataTransfer.files[0]) {
+      setSelectedImage(event.dataTransfer.files[0]);
+    }
   };
 
   return (
