@@ -30,29 +30,57 @@ function ChatApp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (messageText || selectedImage) {
-      const messageData = {
-        username: username,
-        message: messageText,
-        image: selectedImage ? URL.createObjectURL(selectedImage) : null,
-      };
+    socket.emit("chat message", {
+      username: username,
+      message: messageText,
+      image: null,
+    });
 
-      socket.emit("chat message", messageData);
-
-      setMessageText("");
-      setSelectedImage(null);
-    }
+    setMessageText("");
   };
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+    setSelectedImage(event.target.files[0]);
+  };
+
+  const handleImageUpload = () => {
+    if (selectedImage) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
+        const imageBase64 = reader.result;
+        socket.emit("chat message", {
+          username: username,
+          message: "",
+          image: imageBase64,
+        });
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedImage);
     }
+  };
+
+  const handleCameraCapture = () => {
+    const constraints = {
+      video: true,
+    };
+
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((mediaStream) => {
+        const mediaStreamTrack = mediaStream.getVideoTracks()[0];
+        const imageCapture = new ImageCapture(mediaStreamTrack);
+
+        imageCapture
+          .takePhoto()
+          .then((blob) => {
+            setSelectedImage(blob);
+          })
+          .catch((error) => {
+            console.error("takePhoto() error:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("getUserMedia() error:", error);
+      });
   };
 
   return (
@@ -83,15 +111,15 @@ function ChatApp() {
           placeholder="Message"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
-        />
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleImageChange}
+          required
         />
         <button type="submit">Send</button>
       </form>
+      <div className="image-upload-container">
+        <input type="file" onChange={handleImageChange} />
+        <button onClick={handleImageUpload}>Upload Image</button>
+        <button onClick={handleCameraCapture}>Capture from Camera</button>
+      </div>
     </div>
   );
 }
