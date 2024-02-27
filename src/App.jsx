@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import io from "socket.io-client";
 
-import "./App.css"; 
+import "./App.css";
 const socket = io("https://chatrealtimes-92a9bf807df6.herokuapp.com/");
 
 function ChatApp() {
@@ -30,20 +30,6 @@ function ChatApp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    socket.emit("chat message", {
-      username: username,
-      message: messageText,
-      image: null,
-    });
-
-    setMessageText("");
-  };
-
-  const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
-  };
-
-  const handleImageUpload = () => {
     if (selectedImage) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -55,6 +41,30 @@ function ChatApp() {
         });
       };
       reader.readAsDataURL(selectedImage);
+      setSelectedImage(null);
+    } else {
+      socket.emit("chat message", {
+        username: username,
+        message: messageText,
+        image: null,
+      });
+    }
+
+    setMessageText("");
+  };
+
+  const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      // Jika pengguna memilih gambar dari sistem file
+      setSelectedImage(event.target.files[0]);
+    } else if (event.dataTransfer && event.dataTransfer.files[0]) {
+      // Jika pengguna memilih gambar dari drag and drop atau dari kamera
+      const file = event.dataTransfer.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -88,12 +98,24 @@ function ChatApp() {
           onChange={(e) => setMessageText(e.target.value)}
           required
         />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          capture="camera"
+        />
         <button type="submit">Send</button>
       </form>
-      <div className="image-upload-container">
-        <input type="file" onChange={handleImageChange} />
-        <button onClick={handleImageUpload}>Upload Image</button>
-      </div>
+      {selectedImage && (
+        <img
+          src={
+            typeof selectedImage === "string"
+              ? selectedImage
+              : URL.createObjectURL(selectedImage)
+          }
+          alt="Selected"
+        />
+      )}
     </div>
   );
 }
