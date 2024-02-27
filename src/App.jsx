@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
-import "./App.css";
+import "./App.css"; 
 const socket = io("https://chatrealtimes-92a9bf807df6.herokuapp.com/");
 
 function ChatApp() {
@@ -30,22 +30,13 @@ function ChatApp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (messageText || selectedImage) {
-      const messageData = {
-        username: username,
-        message: messageText,
-        image: null,
-      };
+    socket.emit("chat message", {
+      username: username,
+      message: messageText,
+      image: null,
+    });
 
-      if (selectedImage) {
-        messageData.image = selectedImage;
-      }
-
-      socket.emit("chat message", messageData);
-
-      setMessageText("");
-      setSelectedImage(null);
-    }
+    setMessageText("");
   };
 
   const handleImageChange = (event) => {
@@ -95,16 +86,12 @@ function ChatApp() {
           placeholder="Message"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
-        />
-        <input
-          type="file"
-          accept="image/*"
-          capture="camera"
-          onChange={handleImageChange}
+          required
         />
         <button type="submit">Send</button>
       </form>
       <div className="image-upload-container">
+        <input type="file" onChange={handleImageChange} />
         <button onClick={handleImageUpload}>Upload Image</button>
       </div>
     </div>
