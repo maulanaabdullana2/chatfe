@@ -56,7 +56,6 @@ function ChatApp() {
       };
       reader.readAsDataURL(selectedImage);
     }
-    selectedImage("")
   };
 
   return (
@@ -77,14 +76,14 @@ function ChatApp() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Masukan Nama Anda"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
           type="text"
-          placeholder="Message"
+          placeholder="Pesan"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           required
