@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
 import "./App.css";
-const socket = io("https://chatrealtimes-f870c324e3ac.herokuapp.com/");
+const socket = io("https://chatrealtimes-4400fe2ddcd0.herokuapp.com/");
 
 
 function ChatApp() {
@@ -52,7 +52,7 @@ function ChatApp() {
 
       try {
         const response = await fetch(
-          "https://chatrealtimes-f870c324e3ac.herokuapp.com/upload",
+          "https://chatrealtimes-4400fe2ddcd0.herokuapp.com/upload",
           {
             method: "POST",
             body: formData,
