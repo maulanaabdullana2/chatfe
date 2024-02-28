@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 
 import "./App.css";
-const socket = io("https://chatrealtimes-4400fe2ddcd0.herokuapp.com/");
+const socket = io("http://localhost:8000/");
 
 
 function ChatApp() {
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState("");
   const [messageText, setMessageText] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
 
@@ -27,7 +26,7 @@ function ChatApp() {
       socket.off("messages");
       socket.off("incoming message");
     };
-  }, [socket]);
+  },[socket] );
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -41,35 +40,6 @@ function ChatApp() {
     setMessageText("");
   };
 
-  const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
-  };
-
-  const handleImageUpload = async () => {
-    if (selectedImage) {
-      const formData = new FormData();
-      formData.append("image", selectedImage);
-
-      try {
-        const response = await fetch(
-          "https://chatrealtimes-4400fe2ddcd0.herokuapp.com/upload",
-          {
-            method: "POST",
-            body: formData,
-          },
-        );
-        const data = await response.json();
-
-        socket.emit("chat message", {
-          username: username,
-          message: "",
-          image: data.image,
-        });
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
-    }
-  };
 
   return (
     <div className="chat-container">
@@ -103,10 +73,6 @@ function ChatApp() {
         />
         <button type="submit">Send</button>
       </form>
-      <div className="image-upload-container">
-        <input type="file" onChange={handleImageChange} />
-        <button onClick={handleImageUpload}>Upload Image</button>
-      </div>
     </div>
   );
 }
