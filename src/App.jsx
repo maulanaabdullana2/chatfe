@@ -11,7 +11,6 @@ function ChatApp() {
   const [messageText, setMessageText] = useState("");
 
   useEffect(() => {
-
     socket.emit("get messages");
 
     socket.on("messages", (messages) => {
