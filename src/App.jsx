@@ -25,7 +25,7 @@ function ChatApp() {
       socket.off("messages");
       socket.off("incoming message");
     };
-  },[socket] );
+  },[] );
 
   const handleSubmit = (event) => {
     event.preventDefault();
